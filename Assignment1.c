@@ -15,7 +15,7 @@ int strmv(
     if(U == NULL || W == NULL || x == NULL || ws == NULL)
         return EXIT_FAILURE;
     
-  *ws = 0;
+  *ws = 0.0;
 
   for(int i = 0; i < n; i++){
     for(int j = 0; j < p; j++){
@@ -28,6 +28,8 @@ int strmv(
       x[i] += U[i][j] * *ws * alpha;
     }
   }
+
+  printf("result of matrix-vector-scalar multiplication: \n");
 
   for(int i = 0; i < n; i++)
     printf("%f\n", x[i]);
