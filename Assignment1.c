@@ -68,6 +68,7 @@ int main(){
     free(W[0]);
     free(W);
     free(x);
+    free(ws);
 
     
 
