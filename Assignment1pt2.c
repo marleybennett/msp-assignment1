@@ -2,7 +2,7 @@
 #include <stdio.h> //Remove before submitting!
 
 
-int strmv(
+int strsv(
     const long n,
     const long p,
     const char trans,

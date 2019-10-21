@@ -81,7 +81,7 @@ double *malloc_array1d(size_t n){
 
 int main(){
     const long n = 2;
-    const long p = 2;
+    const long p = 3;
     const double alpha = 2;
     double **U = malloc_array2d(n, p);    /* two-dimensional array, row-major */
     double **W = malloc_array2d(n,p);    /* two-dimensional array, row-major */
@@ -94,13 +94,17 @@ int main(){
 
     U[0][0] = 1;
     U[0][1] = 2;
+    U[0][2] = 2;
     U[1][0] = 3;
     U[1][1] = 4;
+    U[1][2] = 4;
 
     W[0][0] = 5;
     W[0][1] = 6;
+    W[0][2] = 6;
     W[1][0] = 7;
     W[1][1] = 8;
+    W[1][2] = 8;
   
     x[0] = 1;
     x[1] = 2;
