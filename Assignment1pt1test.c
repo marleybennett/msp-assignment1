@@ -20,11 +20,19 @@ int strmv(
 
     for(int i = 0; i < n; i++){
         for(int j = 0; j < p; j++){
+            printf("i is %d\n", i);
+            printf("j is %d\n", j);
+            printf("ws[j] is %f\n", ws[j]);
+            printf("W[i][j] is %f\n", W[i][j]);
+            printf("x[i] is %f\n", x[i]);
             ws[j] += W[i][j] * x[i];
+            printf("ws[j] is %f\n", ws[j]);
         }
         x[i] = 0.0;
         for(int j = 0; j < p; j++) {
+            printf("x[i] is %f\n", x[i]);
             x[i] += U[i][j] * ws[j] * alpha;
+            printf("x[i] is %f\n", x[i]);
         }
     }
 
