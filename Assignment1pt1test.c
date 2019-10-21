@@ -5,56 +5,33 @@
 int strmv(
     const long n,
     const long p,
-    const char trans,
+    const char alpha,
     double **U,    /* two-dimensional array, row-major */
     double **W,    /* two-dimensional array, row-major */
-    double *b,     /* one-dimensional array */
+    double *x,     /* one-dimensional array */
     double *ws     /* workspace (length p array) */
     ){
 
-    if(U == NULL || W == NULL || b == NULL || ws == NULL) {
+    if(U == NULL || W == NULL || x == NULL || ws == NULL) {
         return EXIT_FAILURE;
     }
     
     *ws = 0.0;
 
-    if(trans == 'N') {
-        for(int i = 0; i < n; i++){
-            double vproduct1 = 0.0;
-            double vproduct2 = 0.0;
-            for(int j = 0; j < p; j++){
-                vproduct1 += U[i][j] * ws[j];
-                vproduct2 += U[i][j] * W[i][j];
-                printf("vproduct1 = %f\n", vproduct1);
-                printf("vproduct2 = %f\n", vproduct2);
-            }
-            b[i] = (b[i] - vproduct1)/vproduct2;
-            for(int j = 0; j < p; j++) {
-                ws[j] += W[i][j] * b[i];
-            }
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < p; j++){
+            ws[j] += W[i][j] * x[i];
         }
-    } else if(trans == 'T') {
-        for(int i = 0; i < n; i++){
-            double vproduct1 = 0.0;
-            double vproduct2 = 0.0;
-            for(int j = 0; j < p; j++){
-                vproduct1 += W[i][j] * ws[j];
-                vproduct2 += U[i][j] * W[i][j];
-            }
-            b[i] = (b[i] - vproduct1)/vproduct2;
-            for(int j = 0; j < p; j++) {
-                ws[j] += U[i][j] * b[i];
-            }
+        x[i] = 0.0;
+        for(int j = 0; j < p; j++) {
+            x[i] += U[i][j] * ws[j] * alpha;
         }
-    } else {
-        printf("Invalid value for variable trans.\n");
-        return 0;
     }
 
-    printf("result of equation: \n");
+    printf("result of matrix-vector-scalar multiplication: \n");
 
     for(int i = 0; i < n; i++) {
-        printf("%f\n", b[i]);
+        printf("%f\n", x[i]);
     } 
 
     return 0;
@@ -97,13 +74,13 @@ double *malloc_array1d(size_t n){
 int main(){
     const long n = 2;
     const long p = 2;
-    const char trans = 'T';
+    const double alpha = 2;
     double **U = malloc_array2d(n, p);    /* two-dimensional array, row-major */
     double **W = malloc_array2d(n,p);    /* two-dimensional array, row-major */
-    double *b = malloc_array1d(n);     /* one-dimensional array */
+    double *x = malloc_array1d(n);     /* one-dimensional array */
     double *ws = malloc_array1d(p);    /* workspace (length p array) */
 
-    if(U == 0 || W == 0 || b == 0 || ws == 0)
+    if(U == 0 || W == 0 || x == 0 || ws == 0)
         return EXIT_FAILURE;
 
 
@@ -117,8 +94,8 @@ int main(){
     W[1][0] = 7;
     W[1][1] = 8;
   
-    b[0] = 95;
-    b[1] = 106;
+    x[0] = 1;
+    x[1] = 2;
   
     printf("U: \n");
 
@@ -138,20 +115,20 @@ int main(){
     }
 
 
-    printf("b: \n");
+    printf("x: \n");
 
     for(int i = 0; i < n; i++)
-        printf("%f \n", b[i]);
+        printf("%f \n", x[i]);
 
     printf("\n \n");
 
 
-    strmv(n, p, trans, U, W, b, ws);
+    strmv(n, p, alpha, U, W, x, ws);
 
     free(U[0]);
     free(U);
     free(W[0]);
     free(W);
-    free(b);
+    free(x);
     free(ws);
 }
