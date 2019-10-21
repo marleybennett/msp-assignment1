@@ -13,7 +13,17 @@ int strsv(
     ){
 
     if(U == NULL || W == NULL || b == NULL || ws == NULL) {
-        return EXIT_FAILURE;
+        return -1;
+    }    
+
+    for(int i=0;i<n;i++) {
+        double diagonal = 0.0;
+        for(int j=0;j<p;j++) {
+            diagonal += U[i][j]*W[i][j];
+        }
+        if(diagonal == 0.0) {
+            return -1;
+        }
     }
     
     *ws = 0.0;
@@ -25,8 +35,6 @@ int strsv(
             for(int j = 0; j < p; j++){
                 vproduct1 += U[i][j] * ws[j];
                 vproduct2 += U[i][j] * W[i][j];
-                printf("vproduct1 = %f\n", vproduct1);
-                printf("vproduct2 = %f\n", vproduct2);
             }
             b[i] = (b[i] - vproduct1)/vproduct2;
             for(int j = 0; j < p; j++) {
@@ -48,14 +56,8 @@ int strsv(
         }
     } else {
         printf("Invalid value for variable trans.\n");
-        return 0;
+        return -1;
     }
-
-    printf("result of equation: \n");
-
-    for(int i = 0; i < n; i++) {
-        printf("%f\n", b[i]);
-    } 
 
     return 0;
 }
@@ -146,7 +148,13 @@ int main(){
     printf("\n \n");
 
 
-    strmv(n, p, trans, U, W, b, ws);
+    strsv(n, p, trans, U, W, b, ws);
+
+    printf("result of equation: \n");
+
+    for(int i = 0; i < n; i++) {
+        printf("%f\n", b[i]);
+    } 
 
     free(U[0]);
     free(U);
